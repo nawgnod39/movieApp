@@ -32,12 +32,9 @@ function LandingPage() {
     }
 
     const loadMoreItems = () => {
-
         const endpoint = `${API_URL}movie/popular?api_key=${API_KEY}&language=en-US&page=${CurrentPage + 1}`;
         fetchMovies(endpoint)
-
     }
-
 
     return (
         <div style={{ width: '100%', margin: '0' }}>
