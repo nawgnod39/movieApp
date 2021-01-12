@@ -1,8 +1,8 @@
-import React, {useEffect,useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import './favorite.css';
 import Axios from 'axios';
-import {Popover} from 'antd';
-import {IMAGE_BASE_URL} from '../../Config';
+import { Popover } from 'antd';
+import { IMAGE_BASE_URL } from '../../Config';
 
 //이부분이 보이게 app.js에 import 해줌
 //Login 한사람만 보여야하니  true 값이여야함.
@@ -14,18 +14,41 @@ function FavoritePage() {
 
 
     useEffect(() => {
-        
-        Axios.post('/api/favorite/getFavoredMovie', { userFrom: localStorage.getItem('userId') })
-        .then(response => {
-            if (response.data.success) {
-                console.log(response.data)
-                setFavorites(response.data.favorites)
-            } else {
-                alert('영화 정보를 가져오는데 실패 했습니다.')
-            }
-        })
+
+        fetchFavoredMovie()
 
     }, [])
+    
+    const fetchFavoredMovie = () => {
+        Axios.post('/api/favorite/getFavoredMovie', { userFrom: localStorage.getItem('userId') })
+            .then(response => {
+                if (response.data.success) {
+                    setFavorites(response.data.favorites)
+                } else {
+                    alert('영화 정보를 가져오는데 실패 했습니다.')
+                }
+            })
+    }
+
+    const onClickDelete = (movieId, userFrom) => {
+
+        const variables = {
+            movieId,
+            userFrom
+        }
+
+        Axios.post('/api/favorite/removeFromFavorite', variables)
+            .then(response => {
+                if (response.data.success) {
+                    fetchFavoredMovie()
+                } else {
+                    alert("리스트에서 지우는데 실패했습니다.")
+                }
+            })
+
+    }
+
+
 
     const renderCards = Favorites.map((favorite, index) => {
 
@@ -35,7 +58,7 @@ function FavoritePage() {
 
                     <img src={`${IMAGE_BASE_URL}w500${favorite.moviePost}`} /> : "no image"}
 
-                }
+                
             </div>
         )
 
@@ -72,7 +95,9 @@ function FavoritePage() {
                     </tr>
                 </thead>
                 <tbody>
-                
+
+                  {renderCards}
+
                 </tbody>
             </table>
         </div>
