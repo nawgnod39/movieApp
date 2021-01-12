@@ -49,38 +49,6 @@ function Favorite(props) {
 
     }, [])
 
-
-    const onClickFavorite = () => {
-
-        if (Favorited) {
-            Axios.post('/api/favorite/removeFromFavorite', variables)
-                .then(response => {
-                    if (response.data.success) {
-                        setFavoriteNumber(FavoriteNumber - 1)
-                        setFavorited(!Favorited)
-                    } else {
-                        alert('Favorite 리스트에서 지우는 걸 실패했습니다.')
-                    }
-                })
-
-
-        } else {
-            Axios.post('/api/favorite/addToFavorite', variables)
-                .then(response => {
-                    if (response.data.success) {
-                        setFavoriteNumber(FavoriteNumber + 1)
-                        setFavorited(!Favorited)
-
-                    } else {
-                        alert('Favorite 리스트에서 추가하는 걸 실패했습니다.')
-                    }
-                })
-        }
-
-    }
-
-
-
     return (
         <div>
             <Button onClick={onClickFavorite}>{Favorited ? " Not Favorite" : "Add to Favorite "}  {FavoriteNumber}  </Button>
